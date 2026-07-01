@@ -1,6 +1,3 @@
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8874f4d0-39e0-49c2-bc49-a7c71f8a847d" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/fbb4e5b5-7dba-4b60-95b2-188fc5142cc2" />
-
 
 ## 📌 Why This Project? (Problem vs. Solution)
 
@@ -15,3 +12,7 @@ This n8n workflow completely automates the ingestion, analysis, and structured l
 * **Instant Context at a Glance:** The workflow listens for new emails in real-time. Instead of requiring someone to read the whole text, the integrated **AI Agent** extracts the core subject matter, key points, and critical details instantly.
 * **Centralized Data Hub:** The AI-generated summaries—along with metadata like the sender's email address, subject line, and specific category labels—are automatically mapped and appended as clean rows in a Google Sheet.
 * **Team Transparency & Automation:** By moving raw inbox data into a structured spreadsheet, the data becomes universally accessible for team review, future reporting, or triggering secondary automated workflows downstream.
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8874f4d0-39e0-49c2-bc49-a7c71f8a847d" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/fbb4e5b5-7dba-4b60-95b2-188fc5142cc2" />
+
