@@ -1,0 +1,196 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "position": [
+        -992,
+        64
+      ],
+      "id": "abd7199d-f2b3-40cf-b42b-3e125571e341",
+      "typeVersion": 1.4,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "jCFigcstbXyba08e",
+          "name": "verified"
+        }
+      },
+      "notes": "Configure your Gmail credentials and watch for new emails."
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxOutputTokens": 2048
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -928,
+        272
+      ],
+      "id": "7a2348b3-8f77-45b8-8224-bfe236ab1ab5",
+      "name": "Google Gemini Chat Model",
+      "notesInFlow": false,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "cKVIZYWKfqZlMMR2",
+          "name": "verified"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MwRewTOTQIJyE5ThbA414m2bGhi9liGPziCzONkTxC0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MwRewTOTQIJyE5ThbA414m2bGhi9liGPziCzONkTxC0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Gmail Trigger').item.json.From }}",
+            "Summerize-data": "={{ $('Gmail Trigger').item.json.snippet }}",
+            "Subject": "={{ $('Gmail Trigger').item.json.Subject }}",
+            "Label": "={{ $('Gmail Trigger').item.json.labels[1].name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Summerize-data",
+              "displayName": "Summerize-data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Label",
+              "displayName": "Label",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -432,
+        64
+      ],
+      "id": "d2078d1f-c85a-4b59-a492-42078ac17ce1",
+      "name": "email-summerize",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4Og4I9yGp1BomBKo",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are email summerizer \nsumerize the email and save the email name and the data in the google sheet conneccted to this agent \n {{ $json.snippet }}{{ $json.From }}\n{{ $json.Subject }}{{ $json.labels[1]\n}}\nseperate the gmail data and store in the Sumaize-data in the google sheet \nwho send the mail write this mail to the gmail in google sheet\nwrite the subject and label in the google sheet extrected into the gmail\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -784,
+        64
+      ],
+      "id": "31f35651-8930-4e0a-a281-a54b140bb2dd",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "waitBetweenTries": 3000
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "email-summerize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b144a8cf6e6c2abd0fc3cf051f9a72f1c04b23d21f624e5c9e0245757cf6bdd7"
+  }
+}
